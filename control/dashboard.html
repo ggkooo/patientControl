@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh; /* Altura total da página */
+    }
+
+    .sidebar {
+      width: 200px; /* Largura máxima da barra lateral */
+      max-width: 200px; /* Limita a largura máxima */
+      background-color: #333;
+      color: #fff;
+      padding: 15px;
+      transition: width 0.3s ease; /* Transição suave para largura */
+      display: flex;
+      flex-direction: column; /* Alinha os itens verticalmente */
+      justify-content: space-between; /* Espaça o conteúdo para ocupar toda a altura */
+    }
+
+    .sidebar.shrunk {
+      width: 60px; /* Largura da barra lateral fina */
+      padding: 10px 0; /* Ajuste de padding */
+    }
+
+    .sidebar h2 {
+      display: flex;
+      justify-content: center; /* Centraliza o título do menu */
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .toggle-button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      transition: color 0.3s;
+      display: flex; /* Centraliza o SVG */
+      justify-content: center;
+      align-items: center;
+    }
+
+    .toggle-button:hover {
+      color: #575757;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      margin-top: 20px;
+      flex-grow: 1; /* Permite que a lista cresça */
+    }
+
+    .sidebar ul li {
+      margin: 10px 0;
+    }
+
+    .sidebar ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px;
+      display: block;
+      transition: background 0.3s;
+      text-align: center; /* Centraliza o texto nos botões */
+    }
+
+    .sidebar ul li a:hover {
+      background: #575757;
+    }
+
+    .sidebar.shrunk ul li a {
+      padding: 5px; /* Ajuste de padding para a barra fina */
+      font-size: 14px; /* Reduz o tamanho da fonte */
+    }
+
+    .sidebar.shrunk ul li a:before {
+      content: attr(data-initial); /* Usa o atributo data-initial para mostrar a inicial */
+      display: inline-block;
+      width: 100%; /* Largura total para centralizar */
+      text-align: center;
+    }
+
+    .logout-btn {
+      margin-top: auto; /* Move o botão de logout para o final */
+      padding: 10px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #ff1a1a;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    .content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <aside class="sidebar" id="sidebar">
+    <h2>
+      <button class="toggle-button" id="toggle-button">
+        <!-- SVG para o menu hamburguer -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+          <path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/>
+        </svg>
+      </button>
+    </h2>
+    <ul>
+      <li><a href="./dashboard.html" data-initial="H">Home</a></li>
+      <li><a href="pages/account.html" data-initial="C">Conta</a></li>
+      <li><a href="./pages/patient.html" data-initial="P">Pacientes</a></li>
+    </ul>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <h1>Bem-vindo à Dashboard</h1>
+    </header>
+    <section class="content">
+      <h2>Área Principal</h2>
+      <p>Conteúdo da dashboard vai aqui.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+  const { ipcRenderer } = require('electron');
+
+  document.getElementById("toggle-button").addEventListener("click", function() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("shrunk");
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    ipcRenderer.send('logout');
+  });
+</script>
+</body>
+</html>
