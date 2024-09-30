@@ -1,53 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="login-container">
-  <h2>Login</h2>
-  <form id="loginForm">
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
-  <div id="error-message" class="error-message"></div>
-</div>
+<html lang="pt-br">
 
-<script>
-  const { ipcRenderer } = require('electron'); // Importando o ipcRenderer
-  const loginForm = document.getElementById('loginForm');
-  const errorMessage = document.getElementById('error-message');
+  <head>
 
-  // Função para configurar o evento de submit do formulário
-  function setupLoginForm() {
-    loginForm.addEventListener('submit', function(event) {
-      event.preventDefault();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
 
-      // Obter os valores de usuário e senha
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+  </head>
 
-      // Enviar as credenciais para o backend
-      ipcRenderer.send('login', { username, password });
+  <body>
 
-      // Esperar pela resposta do backend
-      ipcRenderer.once('login-response', (event, response) => {
-        if (response.success) {
-          // Navegar para a dashboard ou outra página
-          window.location.href = 'dashboard.html'; // Redireciona para a dashboard
-        } else {
-          errorMessage.textContent = response.message || 'Usuário ou senha inválidos'; // Exibe a mensagem de erro
-        }
-      });
-    });
-  }
+    <div class="login-container">
 
-  // Configura o formulário sempre que a página é carregada
-  setupLoginForm();
-</script>
-</body>
+      <h2>Login</h2>
+
+      <form id="loginForm">
+
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+
+      </form>
+
+      <div id="error-message" class="error-message"></div>
+
+    </div>
+
+    <script>
+
+      const { ipcRenderer } = require('electron');
+      const loginForm = document.getElementById('loginForm');
+      const errorMessage = document.getElementById('error-message');
+
+      function setupLoginForm() {
+
+        loginForm.addEventListener('submit', function(event) {
+
+          event.preventDefault();
+
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+
+          // ENVIO DAS CREDENCIAIS
+          ipcRenderer.send('login', { username, password });
+
+          ipcRenderer.once('login-response', (event, response) => {
+
+            if (response.success) {
+
+              window.location.href = 'dashboard.html';
+
+            } else {
+
+              errorMessage.textContent = 'Usuário ou senha inválidos';
+
+            }
+
+          });
+
+        });
+
+      }
+
+      setupLoginForm();
+
+    </script>
+
+  </body>
+
 </html>

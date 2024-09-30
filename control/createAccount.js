@@ -9,8 +9,8 @@ const connection = mysql.createConnection({
 });
 
 // Supondo que você já tenha uma conexão com o banco de dados
-const username = 'Giordano';
-const password = '12345';
+const username = 'admin';
+const password = 'admin';
 
 bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
