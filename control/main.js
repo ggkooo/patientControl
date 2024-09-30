@@ -1,13 +1,14 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const mysql = require('mysql2');
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 
 const connection = mysql.createConnection({
 
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'test'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 
 });
 
@@ -42,6 +43,13 @@ function createWindow() {
 
 }
 
+connection.connect((err) => {
+    if (err) {
+        console.error('Erro ao conectar ao banco de dados:', err);
+        return;
+    }
+    console.log('Conectado ao banco de dados MySQL');
+});
 
 ipcMain.on('login', (event, { username, password }) => {
 
@@ -82,14 +90,16 @@ ipcMain.on('login', (event, { username, password }) => {
 
                     currentUsername = user.username;
                     currentUserId = user.id;
+                    const userImage = user.image;
 
                     event.reply('login-response', { success: true });
                     mainWindow.loadFile('dashboard.html');
 
+                    mainWindow.maximize();
 
                     mainWindow.webContents.on('did-finish-load', () => {
 
-                        mainWindow.webContents.send('set-username', currentUsername);
+                        mainWindow.webContents.send('set-username', { username: currentUsername, image: userImage });
 
                     });
 
@@ -181,6 +191,44 @@ ipcMain.on('change-password', (event, { currentPassword, newPassword }) => {
             event.reply('change-password-result', { success: false, message: 'Usuário não encontrado.' });
 
         }
+
+    });
+
+});
+
+ipcMain.on('add-patient', (event, newPatient) => {
+    const { firstName, lastName, birthdate, doctor, description } = newPatient;
+
+    // Log para verificar os valores recebidos
+    console.log('Recebendo paciente:', newPatient);
+
+    const sql = `INSERT INTO pacientes (nome, sobrenome, data_nascimento, descricao, medico_responsavel) VALUES (?, ?, ?, ?, ?)`;
+    connection.query(sql, [firstName, lastName, birthdate, description, doctor], (error, results) => {
+        if (error) {
+            console.error('Erro ao adicionar paciente:', error);
+            event.sender.send('add-patient-response', { success: false, message: error.message });
+        } else {
+            event.sender.send('add-patient-response', { success: true });
+        }
+    });
+});
+
+
+ipcMain.on('fetch-patients', (event) => {
+
+    const query = 'SELECT * FROM pacientes';
+
+    connection.query(query, (err, results) => {
+
+        if (err) {
+
+            event.reply('fetch-patients-response', { success: false, message: 'Erro ao buscar pacientes' });
+            console.error(err);
+            return;
+
+        }
+
+        event.reply('fetch-patients-response', { success: true, patients: results });
 
     });
 

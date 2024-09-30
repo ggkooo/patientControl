@@ -1,220 +1,107 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
-  <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pacientes do Dia</title>
-
-    <style>
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        display: flex;
-      }
-
-      .sidebar {
-        width: 160px;
-        height: 100vh;
-        background-color: #333;
-        color: #fff;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-      }
-
-      .sidebar ul {
-        list-style-type: none;
-        margin-top: 20px;
-      }
-
-      .sidebar ul li {
-        margin-bottom: 15px;
-        transition: background-color 0.3s, transform 0.2s;
-      }
-
-      .sidebar ul li a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 18px;
-        display: block;
-        padding: 10px 5px;
-        border-radius: 10px;
-      }
-
-      .sidebar ul li:hover {
-        background-color: #444;
-        border-radius: 5px;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      .logout-button {
-        background-color: #e74c3c;
-        border: none;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: auto;
-        width: 100%;
-        border-radius: 10px;
-        transition: background-color 0.3s;
-      }
-
-      .logout-button:hover {
-        background-color: #c0392b;
-      }
-
-      .main-content {
-        flex: 1;
-        padding: 20px;
-        background-color: #fff;
-        overflow-y: auto;
-      }
-
-      h1 {
-        margin-bottom: 20px;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-      }
-
-      table th, table td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-
-      table th {
-        background-color: #333;
-        color: white;
-      }
-
-      table tr:hover {
-        background-color: #f5f5f5;
-      }
-
-      a {
-        color: #3498db;
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-    </style>
-
-  </head>
-
-  <body>
-
-    <div class="sidebar">
-
-      <h2 style="display:none;">Menu</h2>
-
-      <ul>
-        <li><a href="./dashboard.html">Home</a></li>
-        <li><a href="pages/account.html">Conta</a></li>
-        <li><a href="pages/patient.html">Pacientes</a></li>
-      </ul>
-
-      <button class="logout-button" onclick="logout()">Logout</button>
-
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Consultório</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      Nome <strong>Consultório</strong>
     </div>
+    <nav class="menu">
+      <ul>
+        <li class="active"><a href="dashboard.html"><i class="material-icons">home</i> Início</a></li>
+        <li><a href="pages/pacientes.html"><i class="material-icons">people</i> Pacientes</a></li>
+        <li><a href="#"><i class="material-icons">calendar_today</i> Agenda</a></li>
+        <li><a href="#"><i class="material-icons">attach_money</i> Financeiro</a></li>
+        <li><a href="#"><i class="material-icons">inventory</i> Estoque</a></li>
+        <li><a href="#"><i class="material-icons">book</i> Catálogos</a></li>
+        <li><a href="#"><i class="material-icons">bar_chart</i> Relatórios</a></li>
+        <li><a href="#"><i class="material-icons">settings</i> Opções</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-    <main class="main-content">
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <header class="header">
+      <div class="menu-toggle">
+        Início
+      </div>
+      <div class="user-info">
+        <!-- Nome do usuário será injetado dinamicamente -->
+        <span id="user-name"></span>
+        <img id="user-photo" src="default-photo.png" alt="Foto do Usuário" class="user-photo">
+      </div>
+    </header>
 
-      <header>
+    <!-- Dashboard -->
+    <section class="dashboard">
+      <h1>Meu Consultório</h1>
+      <div class="stats">
+        <div class="stat">
+          <i class="material-icons">people</i>
+          <p>7 Pacientes cadastrados</p>
+        </div>
+        <div class="stat">
+          <i class="material-icons">event</i>
+          <p>0 Agendamentos hoje</p>
+        </div>
+        <div class="stat">
+          <i class="material-icons">cake</i>
+          <p>0 Aniversariantes do dia</p>
+        </div>
+      </div>
 
-        <h1>Pacientes do Dia</h1>
+      <div class="info-section">
+        <div class="patients">
+          <h2>Pacientes recentes</h2>
+          <ul>
+            <li>Cássio Alves Pinheiro</li>
+            <li>Maria Leite dos Santos</li>
+            <li>Diana Prestes Almeida</li>
+            <li>Nilda Francisca Silva</li>
+            <li>Leandro Oliveira Baptista</li>
+          </ul>
+        </div>
+        <div class="waiting-room">
+          <h2>Sala de Espera</h2>
+          <p>2 pacientes aguardando</p>
+        </div>
+      </div>
 
-      </header>
+      <div class="charts">
+        <div class="chart">
+          <h2>Pacientes por Convênio</h2>
+          <img src="chart.png" alt="Gráfico Pacientes por Convênio">
+        </div>
+        <div class="chart">
+          <h2>Consultas por Mês</h2>
+          <img src="chart-line.png" alt="Gráfico Consultas por Mês">
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
 
-      <section class="content">
+<script>
+  const { ipcRenderer } = require('electron');
 
-        <table id="patientTable">
+  ipcRenderer.on('set-username', (event, data) => {
 
-          <thead>
+    const { username, image } = data;
 
-          <tr>
+    document.getElementById('user-name').textContent = username;
+    document.getElementById('user-photo').src = image || 'default-photo.png';
 
-            <th>Nome do Paciente</th>
-            <th>Horário</th>
-
-          </tr>
-
-          </thead>
-
-          <tbody>
-          <!-- Conteúdo será preenchido dinamicamente -->
-          </tbody>
-
-        </table>
-
-      </section>
-
-    </main>
-
-    <script>
-
-      function logout() {
-
-        window.location.href = 'index.html';
-
-      }
-
-      const patients = [
-
-        { name: "Maria Silva", time: "08:30" },
-        { name: "João Souza", time: "09:15" },
-        { name: "Ana Costa", time: "10:00" },
-        { name: "Pedro Oliveira", time: "11:30" }
-
-      ];
-
-      function loadPatientTable() {
-
-        const tableBody = document.querySelector('#patientTable tbody');
-
-        patients.forEach(patient => {
-
-          const row = document.createElement('tr');
-
-          const nameCell = document.createElement('td');
-          const nameLink = document.createElement('a');
-          nameLink.textContent = patient.name;
-          nameLink.href = "#";
-          nameCell.appendChild(nameLink);
-
-          const timeCell = document.createElement('td');
-          timeCell.textContent = patient.time;
-
-          row.appendChild(nameCell);
-          row.appendChild(timeCell);
-
-          tableBody.appendChild(row);
-
-        });
-
-      }
-
-      window.onload = loadPatientTable;
-    </script>
-
-  </body>
-
+  });
+</script>
+</body>
 </html>

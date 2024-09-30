@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - Meu Consultório</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        .add-patient {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex; /* Alinha os campos na mesma linha */
+            gap: 10px; /* Espaçamento entre os campos */
+            margin-bottom: 10px; /* Espaço abaixo da linha de campos */
+        }
+
+        .form-row input, .form-row select {
+            flex: 1; /* Faz com que os inputs ocupem espaço igual */
+            padding: 10px; /* Espaçamento interno */
+            border: 1px solid #ccc; /* Borda */
+            border-radius: 5px; /* Bordas arredondadas */
+        }
+
+        #patient-description {
+            width: 100%; /* Define a largura total */
+            height: 60px; /* Aumenta a altura do campo de descrição */
+            resize: none; /* Impede o redimensionamento do textarea */
+            padding: 10px; /* Espaçamento interno */
+            border: 1px solid #ccc; /* Borda */
+            border-radius: 5px; /* Bordas arredondadas */
+            margin-top: 10px; /* Espaço acima do textarea */
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%; /* Largura total da barra de pesquisa */
+            padding: 10px; /* Espaçamento interno */
+            border: 1px solid #ccc; /* Borda */
+            border-radius: 5px; /* Bordas arredondadas */
+        }
+
+        /* Estilo dos Botões */
+        .action-button {
+            background-color: #007BFF; /* Azul */
+            color: white; /* Texto branco */
+            border: none; /* Remove a borda */
+            border-radius: 5px; /* Bordas arredondadas */
+            padding: 8px 12px; /* Espaçamento interno */
+            cursor: pointer; /* Muda o cursor ao passar o mouse */
+            transition: background-color 0.3s; /* Transição suave */
+        }
+
+        .action-button:hover {
+            background-color: #0056b3; /* Azul mais escuro no hover */
+        }
+
+        .delete-button {
+            background-color: #dc3545; /* Vermelho */
+            color: white; /* Texto branco */
+            border: none; /* Remove a borda */
+            border-radius: 5px; /* Bordas arredondadas */
+            padding: 8px 12px; /* Espaçamento interno */
+            cursor: pointer; /* Muda o cursor ao passar o mouse */
+            transition: background-color 0.3s; /* Transição suave */
+        }
+
+        .delete-button:hover {
+            background-color: #c82333; /* Vermelho mais escuro no hover */
+        }
+
+        .details-button {
+            background-color: #28a745; /* Verde */
+            color: white; /* Texto branco */
+            border: none; /* Remove a borda */
+            border-radius: 5px; /* Bordas arredondadas */
+            padding: 8px 12px; /* Espaçamento interno */
+            cursor: pointer; /* Muda o cursor ao passar o mouse */
+            transition: background-color 0.3s; /* Transição suave */
+        }
+
+        .details-button:hover {
+            background-color: #218838; /* Verde mais escuro no hover */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            Nome <strong>Consultório</strong>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="../dashboard.html"><i class="material-icons">home</i> Início</a></li>
+                <li class="active"><a href="pacientes.html"><i class="material-icons">people</i> Pacientes</a></li>
+                <li><a href="#"><i class="material-icons">calendar_today</i> Agenda</a></li>
+                <li><a href="#"><i class="material-icons">attach_money</i> Financeiro</a></li>
+                <li><a href="#"><i class="material-icons">inventory</i> Estoque</a></li>
+                <li><a href="#"><i class="material-icons">book</i> Catálogos</a></li>
+                <li><a href="#"><i class="material-icons">bar_chart</i> Relatórios</a></li>
+                <li><a href="#"><i class="material-icons">settings</i> Opções</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="menu-toggle">
+                Pacientes
+            </div>
+            <div class="user-info">
+                <span id="user-name"></span>
+                <img id="user-photo" src="default-photo.png" alt="Foto do Usuário" class="user-photo">
+            </div>
+        </header>
+
+        <!-- Patient List Section -->
+        <section class="patients-section">
+
+            <!-- Adicionar Paciente -->
+            <div class="add-patient">
+                <h2>Adicionar Novo Paciente</h2>
+                <form id="add-patient-form">
+                    <div class="form-row">
+                        <input type="text" id="patient-first-name" placeholder="Nome" required>
+                        <input type="text" id="patient-last-name" placeholder="Sobrenome" required>
+                        <input type="date" id="patient-birthdate" required>
+                        <select id="doctor-select" required>
+                            <option value="">Selecione o Médico</option>
+                            <option value="Dr. Silva">Dr. Silva</option>
+                            <option value="Dr. Oliveira">Dr. Oliveira</option>
+                            <option value="Dr. Santos">Dr. Santos</option>
+                            <option value="Dr. Pereira">Dr. Pereira</option>
+                        </select>
+                    </div>
+                    <textarea id="patient-description" placeholder="Descrição" required></textarea>
+                    <button type="submit">Adicionar</button>
+                </form>
+            </div>
+
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar">
+                <input type="text" id="search-patient" placeholder="Pesquisar paciente pelo nome">
+            </div>
+
+            <!-- Tabela de Pacientes -->
+            <div class="patients-list">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nome Completo</th>
+                        <th>Data de Nascimento</th>
+                        <th>Descrição</th>
+                        <th>Médico Responsável</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="patient-list">
+                    <!-- Aqui os pacientes serão inseridos dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Adicionar/Editar Paciente (formulário de edição) -->
+<div class="add-patient" id="edit-patient-form" style="display: none;">
+    <h2>Editar Paciente</h2>
+    <form id="edit-form">
+        <div class="form-row">
+            <input type="text" id="edit-patient-first-name" placeholder="Nome" required>
+            <input type="text" id="edit-patient-last-name" placeholder="Sobrenome" required>
+            <input type="date" id="edit-patient-birthdate" required>
+            <select id="edit-doctor-select" required>
+                <option value="">Selecione o Médico</option>
+                <option value="Dr. Silva">Dr. Silva</option>
+                <option value="Dr. Oliveira">Dr. Oliveira</option>
+                <option value="Dr. Santos">Dr. Santos</option>
+                <option value="Dr. Pereira">Dr. Pereira</option>
+            </select>
+        </div>
+        <textarea id="edit-patient-description" placeholder="Descrição" required></textarea>
+        <button type="submit">Salvar</button>
+    </form>
+</div>
+
+<script>
+    const { ipcRenderer } = require('electron');
+
+    ipcRenderer.on('set-username', (event, data) => {
+        const { username, image } = data;
+        document.getElementById('user-name').textContent = username;
+        document.getElementById('user-photo').src = image || 'default-photo.png';
+    });
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês é indexado a partir de 0
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`; // Formato DD/MM/YYYY
+    }
+
+    let patients = []; // Armazena a lista de pacientes
+
+    function fetchPatients() {
+        ipcRenderer.send('fetch-patients');
+
+        ipcRenderer.on('fetch-patients-response', (event, data) => {
+            console.log(data); // Adicione isso para verificar a estrutura dos dados.
+            const { success, patients: fetchedPatients } = data;
+
+            if (success) {
+                patients = fetchedPatients; // Armazena os pacientes recebidos
+                displayPatients(patients); // Exibe a lista inicial
+            } else {
+                console.error(data.message);
+            }
+        });
+    }
+
+    function displayPatients(patientList) {
+        const patientListElement = document.getElementById('patient-list');
+        patientListElement.innerHTML = ''; // Limpa a lista atual
+
+        patientList.forEach((patient) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td>${patient.firstName} ${patient.lastName}</td>
+            <td>${formatDate(patient.birthdate)}</td>
+            <td>${patient.description || 'Sem descrição'}</td>
+            <td>${patient.doctor}</td>
+            <td>
+                <button class="action-button" onclick="editPatient(${patient.id})">Editar</button>
+                <button class="delete-button" onclick="deletePatient(${patient.id})">Excluir</button>
+                <button class="details-button" onclick="viewDetails(${patient.id})">Detalhes</button>
+            </td>
+        `;
+            patientListElement.appendChild(row);
+        });
+    }
+
+    document.getElementById('add-patient-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const birthdateValue = document.getElementById('patient-birthdate').value;
+
+        // Verifica se a data de nascimento está preenchida
+        if (!birthdateValue) {
+            alert('Por favor, preencha a data de nascimento.');
+            return;
+        }
+
+        const newPatient = {
+            firstName: document.getElementById('patient-first-name').value,
+            lastName: document.getElementById('patient-last-name').value,
+            birthdate: birthdateValue,
+            doctor: document.getElementById('doctor-select').value,
+            description: document.getElementById('patient-description').value,
+        };
+
+        console.log('Novo paciente:', newPatient); // Adicione este log para depuração
+
+        ipcRenderer.send('add-patient', newPatient);
+
+        ipcRenderer.on('add-patient-response', (event, data) => {
+            const { success, message } = data;
+            if (success) {
+                fetchPatients(); // Atualiza a lista de pacientes
+                document.getElementById('add-patient-form').reset(); // Limpa o formulário
+            } else {
+                alert(message); // Exibe mensagem de erro
+            }
+        });
+    });
+
+    function deletePatient(patientId) {
+        if (confirm("Tem certeza que deseja excluir este paciente?")) {
+            ipcRenderer.send('delete-patient', patientId);
+            ipcRenderer.on('delete-patient-response', (event, data) => {
+                const { success, message } = data;
+                if (success) {
+                    fetchPatients(); // Atualiza a lista de pacientes
+                } else {
+                    alert(message); // Exibe mensagem de erro
+                }
+            });
+        }
+    }
+
+    function editPatient(patientId) {
+        const patient = patients.find(p => p.id === patientId);
+
+        if (patient) {
+            document.getElementById('edit-patient-first-name').value = patient.firstName;
+            document.getElementById('edit-patient-last-name').value = patient.lastName;
+            document.getElementById('edit-patient-birthdate').value = patient.birthdate;
+            document.getElementById('edit-doctor-select').value = patient.doctor;
+            document.getElementById('edit-patient-description').value = patient.description;
+
+            document.getElementById('edit-patient-form').style.display = 'block'; // Exibe o formulário de edição
+        }
+    }
+
+    document.getElementById('edit-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const updatedPatient = {
+            id: patients.find(p => p.firstName === document.getElementById('edit-patient-first-name').value).id, // Obtém o ID do paciente
+            firstName: document.getElementById('edit-patient-first-name').value,
+            lastName: document.getElementById('edit-patient-last-name').value,
+            birthdate: document.getElementById('edit-patient-birthdate').value,
+            doctor: document.getElementById('edit-doctor-select').value,
+            description: document.getElementById('edit-patient-description').value,
+        };
+
+        ipcRenderer.send('edit-patient', updatedPatient);
+
+        ipcRenderer.on('edit-patient-response', (event, data) => {
+            const { success, message } = data;
+            if (success) {
+                fetchPatients(); // Atualiza a lista de pacientes
+                document.getElementById('edit-patient-form').style.display = 'none'; // Esconde o formulário de edição
+            } else {
+                alert(message); // Exibe mensagem de erro
+            }
+        });
+    });
+
+    function viewDetails(patientId) {
+        const patient = patients.find(p => p.id === patientId);
+        if (patient) {
+            alert(`Detalhes do paciente:\nNome: ${patient.firstName} ${patient.lastName}\nData de Nascimento: ${formatDate(patient.birthdate)}\nDescrição: ${patient.description}\nMédico Responsável: ${patient.doctor}`);
+        }
+    }
+
+    fetchPatients(); // Carrega a lista de pacientes ao iniciar
+</script>
+</body>
+</html>

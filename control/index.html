@@ -1,73 +1,109 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F4F7FC;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-  <head>
+    .login-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 320px;
+      text-align: center;
+    }
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    h2 {
+      color: #2C3E50;
+      margin-bottom: 20px;
+    }
 
-  </head>
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #BFC9D9;
+      border-radius: 4px;
+      background-color: #F4F7FC;
+    }
 
-  <body>
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #3498DB;
+    }
 
-    <div class="login-container">
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #3498DB;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-      <h2>Login</h2>
+    button:hover {
+      background-color: #2980B9;
+    }
 
-      <form id="loginForm">
+    .error-message {
+      color: #E74C3C;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+  <div id="error-message" class="error-message"></div>
+</div>
 
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit">Login</button>
+<script>
+  const { ipcRenderer } = require('electron');
+  const loginForm = document.getElementById('loginForm');
+  const errorMessage = document.getElementById('error-message');
 
-      </form>
+  function setupLoginForm() {
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
-      <div id="error-message" class="error-message"></div>
+      // ENVIO DAS CREDENCIAIS
+      ipcRenderer.send('login', { username, password });
 
-    </div>
+      ipcRenderer.once('login-response', (event, response) => {
+        if (response.success) {
+          window.location.href = 'dashboard.html';
+        } else {
+          errorMessage.textContent = 'Usuário ou senha inválidos';
+        }
+      });
+    });
+  }
 
-    <script>
-
-      const { ipcRenderer } = require('electron');
-      const loginForm = document.getElementById('loginForm');
-      const errorMessage = document.getElementById('error-message');
-
-      function setupLoginForm() {
-
-        loginForm.addEventListener('submit', function(event) {
-
-          event.preventDefault();
-
-          const username = document.getElementById('username').value;
-          const password = document.getElementById('password').value;
-
-          // ENVIO DAS CREDENCIAIS
-          ipcRenderer.send('login', { username, password });
-
-          ipcRenderer.once('login-response', (event, response) => {
-
-            if (response.success) {
-
-              window.location.href = 'dashboard.html';
-
-            } else {
-
-              errorMessage.textContent = 'Usuário ou senha inválidos';
-
-            }
-
-          });
-
-        });
-
-      }
-
-      setupLoginForm();
-
-    </script>
-
-  </body>
-
+  setupLoginForm();
+</script>
+</body>
 </html>
